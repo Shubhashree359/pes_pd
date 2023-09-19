@@ -143,6 +143,11 @@ Week 3 - Physical Design
 </details><details>
    <summary>  Week 3 -> Day 1 </summary>
 
+## Contents of Day 1
+* How to talk to computers.
+* Soc Design and Openlane
+* Open Source EDA Tools.
+
    ### How to talk to computers.
    Any board is the processor/SoC with interfaces. Packages have predefined pins and these are connected to the chip using wires. Packages have components like pads (signals going inside the chip or out of the chip go through the pads), core (where all the digital logic sits),die, foundry IPs (like SRAM, ADC, DAC, PLL) and macros (like the SoC and SPI).
    
@@ -460,9 +465,10 @@ Transition Time The time it takes the signal to move between states is the trans
 * Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr )
 * Fall transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
 
-  </details><details>
-   <summary>  Week 3 -> Day 3 </summary>
+</details><details>
+  <summary>  Week 3 -> Day 3 </summary>
 
+## content of day 3:
 * Labs for CMOS inverter ngspice simulations.
 * Inception of Layout CMOS fabrication process.
 * sky130 Tech file Labs
@@ -704,7 +710,10 @@ Now save the file and run DRC check
 </details><details>
    <summary>  Week 3 -> Day 5 </summary>
 
-
+## Contents of Day 5
+* Routing and Design rule check(DRC)
+* Power Distribution Network and routing.
+* TritonRoute Features.
 
 
 
