@@ -5,6 +5,7 @@ Week 2 - RTL;
 
 Week 3 - Physical Design
 
+
 ## Contents of Week 3
 </details><details>
   <summary>Contents of Day 1</summary>
@@ -458,6 +459,252 @@ Transition Time The time it takes the signal to move between states is the trans
 
 * Rise transition time = time(slew_high_rise_thr) - time (slew_low_rise_thr )
 * Fall transition time = time(slew_high_fall_thr) - time (slew_low_fall_thr)
+
+  </details><details>
+   <summary>  Week 3 -> Day 3 </summary>
+
+* Labs for CMOS inverter ngspice simulations.
+* Inception of Layout CMOS fabrication process.
+* sky130 Tech file Labs
+
+## Labs for CMOS inverter ngspice simulations
+
+IO Placer revision PnR is a iterative flow and hence, we can make changes to the environment variables when required. For example we can change the pin configuration along the core from equvi distance randomly placed to someother placement.
+
+SPICE deck creation for CMOS inverter
+
+To simulate standard cells we need to create spice deck for our cell. The spice deck will contain
+
+Component connectivity which include the substrate taps that tunes the threshold voltage of the MOS
+Component values like values of PMOS and NMOS, Output load, Input Gate Voltage, supply voltage
+Node names which are required to define the SPICE Netlist
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/40f389fc-6247-4c3a-9f9a-8c16dd3bc20a)
+
+Switching Threshold of a CMOS Inverter CMOS cells have three modes of operation:
+
+Cutoff - No inversion Triode - Inversion but no pinchoff in channel Saturation - Inversion and pinchoff in channel
+
+The voltages at which the switch between the modes of operation happens is dependent on the threshold voltage of the device. Threshold voltage is a function of the W/L ratio of a device, therefore varying the W/L ratio will vary the output waveform of CMOS devices. To enable efficient description of the varying waveforms a single parameter called switching threshold is used. Switching threshold is defined at the intersection of Vin = Vout.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/2c0eb6b7-e508-4a0b-8fe2-ee6e438883a9)
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/969e6148-6891-4205-a7e2-5045bc386c15)
+
+### Static and dynamic simulation of CMOS inverter
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/91381f65-f02f-470b-a588-04611e8b3cb3)
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/9dcbbdd1-a48e-4237-957d-60640a39cb99)
+
+### steps to git clone vsdstdcelldesign
+
+Cloning repository
+  git clone https://github.com/nickson-jose/vsdstdcelldesign.git
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/3a8551d3-46d7-4f18-83ef-6f0428e4548e)
+
+command for layout
+  magic -T sky130A.tech sky130_inv.mag &
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/2dbe25a6-ad4a-49ff-b2a4-bf450189a10f)
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/e0f82380-70fe-4607-aa4a-29cb5deadc51)
+
+## Inception of Layout and CMOS Fabrication Process
+
+### 16 mask CMOS process
+## 1. Substrate Selection: 
+* In the initial phase, the appropriate semiconductor substrate is chosen.
+* P-Type substrate with resistivity around (5-50 ohm) doping level (10^15 cm^-3) and orientation (100).
+* Note that substrate doping should be less than well doping (used to fabricate NMOS and PMOS)
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/1529bde9-cced-4b7b-8b76-f1444037371b)
+
+## 2. Create active resistance
+* This step creates pockets for NMOS and PMOS
+* to isolate the active regions for transistors SiO2 and Si3N2 deposited. Pockets created using photoresist and lithography.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/e9f9833e-449c-4619-8392-9bdd53edfb88)
+
+## 3. Nwell & Pwell formation : 
+* P-well formation involves photolithography and ion implantation of p-type Boron material into the p-substrate.N-well is formed similarly with n-type Phosphorus material.
+* Apply photoresist, apply mask that covers NMOS
+* Expose to UV, Wash, remove mask, appl boron(p-type) using Ion Implantation at an energy of 200Kev(for diffusion)
+* repeat it for the other half using phosphorous @400Kev because phosphorous is heavier
+* Wells have been created but the depth is low. Therefore subject it to high temperature furnace which increases the well depth.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/e57135e6-12dd-4b2e-8577-ef487709b17f)
+
+## 4. Formation of Gate
+* We repeat the step 3 but at low energy with p-type implant as boron @60Kev and n-type implant as Arsenic.
+* Due to this The SiO2 is damaged as the dopants penetrate through it.
+* Therefore original SiO2 is etched out using dilute HF solution and regrown to give high quality oxide(~10 nm thin)
+* Finally for the gate to form, apply N-type ion implants for low gate resistance.
+* Now mask on small width of Nwell and PWell above SiO2 and perform photolithography
+* Gate Formation is Done
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/0e0fa297-0485-4fa8-8483-be90777aac7e)
+
+## 5. Lighlt Doped Drain Formation(LDD Formation)
+* On the surface of SiO2 corresponding to NWell, apply photoresist, mask it, put phosphorous to make N-Implant on p-well(N-)
+* Similarly do it for the other side using boron that forms (p-) implant
+* This LDD has to be protected from further process
+* so, Deposit 0.1um thick SiO2 on full structure and etch out using plasma anisotropic etching that results in formation of side wall spacers.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/2668b75a-759a-4917-9b21-2ff1f86138dc)
+
+## 6. Source and Drain Formation
+* Mask Nwell structure, deposit arsenic @75KeV that forms an N+ implant on Pwell
+* use boron for P+ implant formation on Nwell
+* Subject it to high temperature furnace that results in required thickness of N+,P+,N-,P- implants.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/90d8cff6-2bc2-4a5d-b5f7-f236c313366e)
+
+## 7. Steps to form contacts and interconnects
+* Etch thin SiO2 oxide in HF solution
+* Deposit Titanium of wafer surface using sputtering all over the structure
+* Wafer heated at 600-700 degree in ambient N2 environment for 60 sec that reults in low resistance TiSi2 where the gate of both MOS is present.
+* At the other places, TiN is formed that's used for local communication
+* Etch off TiN on and half around gate structure of both MOS using RCA Cleaning
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/e7bc9978-44a1-4e7b-8586-aad2ed74fd19)
+
+## 8. Higher level metal formation
+* On the resulted structure, deposit a thick layer of (1um) SiO2 doped with P/B known as phosphoborosilicate glass
+* To make the added surface plain, use CMP (Chemical Metal Polishing)
+* For the creation of contact pins, proper holes with contacts have to be made
+* this can be done using Al, W and TiN layer depositions.
+* Deposit a layer of Si3N4 that acts as dielectric to protect the chip.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/4b6350e2-df90-4d9b-ade5-1d4b906194c6)
+
+9. Final STructure
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/475a871d-876a-404a-a803-ee0185b72c30)
+
+## Lab introduction to sky130 basic layers layout ns LEF usinf inverter
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/2c813bfa-816d-4493-891e-f743b8f16fde)
+
+* select a region from the layout, go to the console and type 
+  what
+ to display the information of selected area
+* To select a region, place cursor on that point and press 's'. More the number of times you press 's', higher the abstraction selected.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/77f99964-26b5-4b57-9fa2-52ec2527f287)
+
+### DRC Errors
+
+DRC errors in magic will be highlighted with white dotted lines:
+
+To identify DRC errors select DRC find next error: it will be displayed on the tkcon window
+
+Extracting to SPICE Command
+
+  extract all
+  ext2spice cthresh 0 rthresh 0
+
+cthresh and rthresh are used to extract all parasatic capacitances.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/c5638f57-04c2-48e9-9705-2bafa0ffcf87)
+
+spice file:
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/971590cb-2ff9-4d5d-9c26-1b76c648467b)
+
+## Sky130 Tech File Labs
+### Lab steps to create final SPICE deck using Sky130 tech
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/971590cb-2ff9-4d5d-9c26-1b76c648467b)
+
+from this file we can see the contents of pmos and nmos as shown.
+
+Y is gate A is drain and then we source followed by the substrate.
+
+we modify this by mentioning the transition times and the various parameters of ground and source as shown below:
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/7ba1eef0-9d0b-47e7-9322-c84dde408d79)
+
+run this file using ngspice:
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/e3caf573-cb43-40de-9af9-29cbb5f42dd1)
+
+### Lab steps to characterize inverter using sky130 model files
+
+plot output vs time in ngspice
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/1df92ef7-d7eb-47e1-9d7f-70cd6ea9c36b)
+
+we see that the output y red line is slightly shifted we can see this by zooming into it as shown below:
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/466ac047-1329-41ce-ad8f-2df54630b961)
+
+### Lab introduction to Magic tool options and DRC rules
+Magic is a venerable VLSI layout tool, written in the 1980's at Berkeley by John Ousterhout, now famous primarily for writing the scripting interpreter language Tcl. Due largely in part to its liberal Berkeley open-source license, magic has remained popular with universities and small companies. The open- source license has allowed VLSI engineers with a bent toward programming to implement clever ideas and help magic stay abreast of fabrication technology. However, it is the well thought-out core algorithms which lend to magic the greatest part of its popularity. Magic is widely cited as being the easiest tool to use for circuit layout, even for people who ultimately rely on commercial tools for their product design flow.
+
+  http://opencircuitdesign.com/magic/
+
+### Lab introduction to Sky130 pdk's and steps to download labs
+we download the tech files of the labs using the command wget http://opencircuitdesign.com/open_pdks/archive/drc_tests.tgz which we will be using in magic 
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/d7791781-05d4-423f-a1f6-3c4b36d7f470)
+
+these are tar files that contain the tech files for the magic labs.
+
+Commands to open magic
+
+magic -d XR
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/ecfa26a0-189f-41a5-953a-29623a575e81)
+
+To see DRC error select area and type drc why in tkcon
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/03a3bd44-d50f-4189-834d-ce2d7f57dd91)
+
+To fix the error open the sky130A.tech file using a editor and search for poly.9
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/8499b5ea-9525-40bc-a67e-a2d19fd5f766)
+
+Now load the sky130A.tech file again and type the command drc check
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/de751a81-a3d1-444c-acef-08dff41d0e20)
+
+DRC error as geometrical construct
+
+Open the nwell.mag file in magic. Seletch the nwell.6 and type the commands
+
+cif ostyle drc cif see dnwell_shrink cif see dnwell_missing
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/554ceca4-d177-4b76-b5c1-dbdf377a5e37)
+
+ERROR
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/87367f95-936b-4d18-a05b-5e70621f6d26)
+
+FIXING THE ERROR
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/97b1b3fc-6cfa-4b90-a399-b6be56708df8)
+
+Now save the file and run DRC check
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/23bf3386-cc4b-4056-9c53-8f1c448716ca)
+
+</details><details>
+   <summary>  Week 3 -> Day 4 </summary>
+
+## Contents of Day 4
+* Timing modeling using delays.
+* Timing analysis with ideal clocks using openSTA
+* Clock tree synthesis TritonCTS and signal integrity.
+* Timing analysis with real clocks using openTA
+
+### Timing modeling using delay table
+
+</details><details>
+   <summary>  Week 3 -> Day 5 </summary>
+
+
 
 
 
