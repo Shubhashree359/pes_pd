@@ -802,7 +802,6 @@ now type magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky
 
 ![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/647c52af-39c9-429c-bbf8-93901723af9a)
 
-![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/fc112bc7-fedb-43f3-9f76-f3643f59851e)
 
 ### Timing analysis with ideal clocks using openSTA
 
@@ -876,52 +875,6 @@ we do,
 
 ![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/acf07024-25b2-43cc-8455-537842e1e89e)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </details><details>
    <summary>  Week 3 -> Day 5 </summary>
 
@@ -929,6 +882,114 @@ we do,
 * Routing and Design rule check(DRC)
 * Power Distribution Network and routing.
 * TritonRoute Features.
+
+### Routing and Design Rule Check
+
+#### Maze Routing
+The algorithim find the best possible route from the source to target.(Maze Routing - Lee's Algorithim)
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/fd56aaf3-98e8-44fb-9d21-e5db4cf8716f)
+
+creates a grid and numbers the path
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/741133ce-8171-49d0-9c9b-3c5745252b5c)
+
+first path
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/2dc8bc7f-d4a7-4d56-b88d-1cfaf392bc1b)
+
+second path
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/89047274-a0a6-4c49-a161-115026036177)
+
+since the second path is having less turns, we choose that
+another example
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/43e951a8-9544-44d9-ad91-027bb79c82c5)
+
+similarl for other paths
+
+#### DRC
+
+Must maintain minimum wire width
+Must maintain minimum length between 2 wires
+Must maintain minimum wire pitch There are many more rules.
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/690c952b-4317-4d24-b734-f6252e3a8ea8)
+
+###  Power Distribution Network and routing.
+PDN (Power Delivery Network) routing is a crucial aspect of integrated circuit design. It involves the creation of a network of traces and components to ensure that power is distributed effectively and reliably to all parts of the electronic device.
+
+Global and detailed routing are two essential steps in the design and manufacturing of integrated circuits. After generating our clock tree network we generate the power distribution network gen_pdn using OpenLANE:
+
+The PDN will create:
+* Power ring global to the entire core
+* Power halo local to any preplaced cells
+* Power straps to bring power into the center of the chip
+* Power rails for the standard cells
+
+  gen_pdn
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/87a11f6d-14a7-4c13-9d9b-ce667dcf11b6)
+
+![image](https://github.com/Shubhashree359/pes_pd/assets/142501263/38f72811-ea3b-4194-ae54-2e178643ffc8)
+
+The pitch of the metal 1 power rails defines the height of the standard cells
+
+### Global and Detailed Routing
+OpenLANE uses TritonRoute as the routing engine run_routing for physical implementations of designs. Routing consists of two stages:
+
+* Global Routing - Routing guides are generated for interconnects on our netlist defining what layers, and where on the chip each of the nets will be reputed
+* Detailed Routing - Metal traces are iteratively laid across the routing guides to physically implement the routing guides
+
+If DRC errors persist after routing the user has two options:
+
+* Re-run routing with higher QoR settings
+* Manually fix DRC errors specific in tritonRoute.drc file
+
+### SPEF Extraction
+
+SPEF stands for Standard Parasitic Exchange Format, and it is a standard file format used in the semiconductor industry to represent parasitic information for integrated circuits. Parasitic elements, such as resistance and capacitance, can significantly affect the performance of a circuit, so accurate modeling and extraction of these parasitics are crucial for designing and optimizing electronic devices.After routing has been completed interconnect parasitics can be extracted into a SPEF file. The SPEF extractor is nota part of OpenLANE as of now.
+
+Commands is
+
+  cd Desktop/work/tools/SPEF_Extractor
+
+then
+  python3 /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/18-09_09-37/tmp/merged.lef /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/18-09_09-37/results/routing/picorv32a.def
+
+The SPEF exracted file is created. Path to the created files is
+
+  /home/vsduser/Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/18-09_09-37/results/routing/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
